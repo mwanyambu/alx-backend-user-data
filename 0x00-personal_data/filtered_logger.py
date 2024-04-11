@@ -12,9 +12,11 @@ from typing import List
 PII_FIELDS = ('name', 'email', 'phone', 'ssn', 'creditcard')
 
 
-def filter_datum(fields: list, redaction: str, message: str, separator: str) -> str:  # nopep8
+def filter_datum(fields: List[str], redaction: str, message: str, separator: str) -> str:  # nopep8
     """ returns a log message obfuscated """
-    return re.sub(r'({})[^{}]+({})'.format('|'.join(fields), separator, separator), r'\1{}{}'.format(redaction, separator), message)  # nopep8
+    for field in fields:
+        message = re.sub(f'{field}=.*?{separator}', f'{field}={redaction}{separator}', message)  # nopep8
+    return message
 
 
 def get_logger() -> logging.Logger:
@@ -23,7 +25,7 @@ def get_logger() -> logging.Logger:
     logger.setLevel(logging.INFO)
     logger.propagate = False
     stream = logging.StreamHandler()
-    formatter = RedactingFormatter(PII_FIELDS)
+    stream.setFormatter(RedactingFormatter(list(PII_FIELDS)))
     logger.addHandler(stream)
     return logger
 
