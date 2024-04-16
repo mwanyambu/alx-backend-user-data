@@ -64,6 +64,7 @@ class BasicAuth:
         if request is None:
             return None
         autho_header = self.authorization_header(request)
+        extracted_autho_header = self.extract_base64_authorization_header(autho_header)  # nopep8
         decoded_autho_header = self.decode_base64_authorization_header(autho_header)  # nopep8
         username, password = self.extract_user_credentials(decoded_autho_header)
         user = self.user_object_from_credentials(username, password)
