@@ -12,7 +12,7 @@ import binascii
 from flask import request
 
 
-class BasicAuth:
+class BasicAuth(Auth):
     """ basic auth class """
 
     def extract_base64_authorization_header(self, authorization_header: str) -> str:  # nopep8
