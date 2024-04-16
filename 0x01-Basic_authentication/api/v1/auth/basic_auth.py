@@ -19,13 +19,18 @@ class BasicAuth:
         """ extract base64 authorization header """
         if authorization_header is None or type(authorization_header) is not str:  # nopep8
             return None
-        if authorization_header[:6] != "Basic ":
+        if not isinstance(authorization_header, str):
             return None
-        return authorization_header[6:]
+        if not authorization_header.startswith("Basic "):
+            return None
+        encoded = authorization_header.split(' ', 1)[1]
+        return encoded
 
     def decode_base64_authorization_header(self, base64_authorization_header: str) -> str:  # nopep8
         """ decode base64 authorization header """
         if base64_authorization_header is None or type(base64_authorization_header) is not str:  # nopep8
+            return None
+        if not isinstance(base64_authorization_header, str):
             return None
         try:
             return base64.b64decode(base64_authorization_header).decode('utf-8')  # nopep8
@@ -36,9 +41,11 @@ class BasicAuth:
         """ extract user credentials """
         if decoded_base64_authorization_header is None or type(decoded_base64_authorization_header) is not str:  # nopep8
             return (None, None)
-        if ':' not in decoded_base64_authorization_header:
-            return (None, None)
-        return tuple(decoded_base64_authorization_header.split(':', 1))
+        try:
+            username, password = decoded_base64_authorization_header.split(':', 1)  # nopep8
+            return username, password
+        except ValueError:
+            return "", ""
 
     def user_object_from_credentials(self, user_email: str, user_pwd: str) -> TypeVar('User'):  # nopep8
         """ user object from credentials """
