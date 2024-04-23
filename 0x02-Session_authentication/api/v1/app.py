@@ -54,18 +54,33 @@ def forbidden(error) -> str:
 @app.before_request
 def before_request() -> str:
     """
-    before request
+    This function is executed before each request is processed.
+    It performs authentication checks and sets the current user for the request.
+
+    Returns:
+        str: The current user for the request.
+
+    Raises:
+        401: If the request is not authenticated.
+        403: If the current user is not authorized to access the requested path.
     """
     if auth is None:
         return
-    excluded_paths = ['/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/', '/api/v1/auth_session/login/']  # nopep8
+
+    excluded_paths = ['/api/v1/status/',
+                      '/api/v1/unauthorized/',
+                      '/api/v1/forbidden/',
+                      '/api/v1/auth_session/login/']
     if request.path in excluded_paths:
         return
+
     if not auth.require_auth(request.path, excluded_paths):
+        abort(401)
         return
 
     auth_header = auth.authorization_header(request)
-    if auth_header is None and auth.session_cookie(request) is None:
+    if auth_header is None \
+        and auth.session_cookie(request) is None:
         abort(401)
 
     currentuser = auth.current_user(auth_header)
