@@ -1,7 +1,15 @@
 #!/usr/bin/env python3
 
 """
-Route module for the API
+Route module for the API.
+
+This module sets up the Flask application and handles routing for various endpoints.
+It includes authentication mechanisms based on the environment variable AUTH_TYPE.
+Supported authentication types include 'auth', 'basic_auth', and 'session_auth'.
+
+Environment Variables:
+    AUTH_TYPE: Specifies the type of authentication mechanism to use ('auth', 'basic_auth', 'session_auth').
+
 """
 from os import getenv
 from api.v1.views import app_views
