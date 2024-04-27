@@ -14,6 +14,7 @@ def _hash_password(password: str) -> bytes:
     hashed = bcrypt.hashpw(password.encode(), salt)
     return hashed
 
+
 def _generate_uuid() -> str:
     """ returns a string uuid """
     return str(uuid4())
@@ -25,7 +26,7 @@ class Auth:
 
     def __init__(self):
         self._db = DB()
-    
+
     def register_user(self, email: str, password: str) -> User:
         """ register new user """
         try:
@@ -58,12 +59,13 @@ class Auth:
         session_id = _generate_uuid()
         self._db.update_user(user.id, session_id=session_id)
         return session_id
+
     def get_user_from_session_id(session_id: str) -> User:
         """ get user by session id """
         if session_id is None:
             return None
         try:
-            user = self._db.find_user_by(session_id=session_id)
+            user = _db.find_user_by(session_id=session_id)
         except NoResultFound:
             return None
         return user
