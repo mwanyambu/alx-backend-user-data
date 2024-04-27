@@ -8,10 +8,12 @@ from auth import Auth
 app = Flask(__name__)
 AUTH = Auth()
 
+
 @app.route('/', methods=['GET'])
 def hello():
     """ start flask app """
     return jsonify({"message": "Bienvenue"})
+
 
 @app.route("/users", methods=["POST"])
 def register_user():
@@ -46,9 +48,10 @@ def login() -> str:
     response.set_cookie("session_id", session_id)
     return response
 
+
 @app.route("/sessions", methods=["DELETE"])
 def logout() -> str:
-    """ logout user""" 
+    """ logout user"""
     session_id = request.cookies.get("session_id", None)
     if session_id is None:
         abort(403)
