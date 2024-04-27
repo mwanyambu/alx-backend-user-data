@@ -64,8 +64,9 @@ class Auth:
         """ get user by session id """
         if session_id is None:
             return None
+        auth = Auth()
         try:
-            user = _db.find_user_by(session_id=session_id)
+            user = auth._db.find_user_by(session_id=session_id)
         except NoResultFound:
             return None
         return user
