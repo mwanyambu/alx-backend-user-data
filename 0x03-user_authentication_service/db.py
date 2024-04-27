@@ -11,7 +11,6 @@ from user import Base, User
 import logging
 
 
-
 class DB:
     """DB class
     """
